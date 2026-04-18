@@ -1,0 +1,57 @@
+# Specify workflow name
+name: Project 2 CI
+
+# Run workflow on push
+on: push
+
+# Specify jobs - the units of work
+jobs: 
+  # Linter job
+  lint:
+    # Run on vm with latest ubuntu linux
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository, install python
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      # Install requirements; flake8 included in dependencies
+      - run: pip install -r requirements.txt
+      # Run flake8 on all files in cd
+      - run: flake8 .
+
+  # Test runner job
+  test:
+    # Run on vm with latest ubuntu linux
+    runs-on: ubuntu-latest
+    # Matrix strategy for this job
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      # Checkout repository, install python; job will run for each version
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      # Install requirements
+      - run: pip install -r requirements.txt
+      # Run repository tests
+      - run: pytest tests/
+
+  # Coverage tool job
+  coverage:
+    # Run on vm with latest ubuntu linux
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository, install python
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      # Install requirements; coverage included in requirements
+      - run: pip install -r requirements.txt
+      # Run test coverage, provide coverage report
+      - run: pytest tests/ --cov=src --cov-report=term
+
