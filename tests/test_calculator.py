@@ -1,7 +1,9 @@
 """Tests for calculator operations."""
 import pytest
-from src.calculator import add, subtract, multiply, divide, modulo, power, square_root, factorial
-from src.validator import validate_range, validate_positive, validate_non_negative, validate_integer
+from src.calculator import add, subtract, \
+    multiply, divide, modulo, power, square_root, factorial
+from src.validator import validate_range, \
+    validate_positive, validate_non_negative, validate_integer
 
 def test_add():
     assert add(2, 3) == 5
@@ -55,21 +57,21 @@ def test_factorial_negative():
         factorial(-1)
 
 def test_range_validation():
-    assert validate_range(100) == True
-    assert validate_range(2000) == False
-    assert validate_range(-2000) == False
+    assert validate_range(100)
+    assert not validate_range(2000)
+    assert not validate_range(-2000)
 
 def test_validate_positive():
-    assert validate_positive(5) == True
-    assert validate_positive(-5) == False
-    assert validate_positive(0) == False
+    assert validate_positive(5)
+    assert not validate_positive(-5)
+    assert not validate_positive(0)
 
 def test_validate_non_negative():
-    assert validate_non_negative(5) == True
-    assert validate_non_negative(0) == True
-    assert validate_non_negative(-5) == False
+    assert validate_non_negative(5)
+    assert validate_non_negative(0)
+    assert not validate_non_negative(-5)
 
 def test_validate_integer():
-    assert validate_integer(5) == True
-    assert validate_integer(5.0) == True
-    assert validate_integer(5.5) == False
+    assert validate_integer(5)
+    assert validate_integer(5.0)
+    assert not validate_integer(5.5)
